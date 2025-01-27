@@ -28,12 +28,8 @@ export default function Counter() {
   }, 500)
 
   const selectUserTopic = (e) => {
-    const currentTitle = userList.find(({ id }) => id === e.target.value)
-    if (currentTitle) {
-      var topic = currentTitle.title.toLowerCase();
-      dispatch(setSelectKey(topic))
-    }
-
+    const selectedValue = e.target.value; 
+    dispatch(setSelectKey(selectedValue))
   };
 
   const filterBasedOnSearch = (isDropDown) => {
@@ -45,7 +41,7 @@ export default function Counter() {
 
     }
     if (!isDropDown && selectKey) {
-      filteredData = filteredData.filter(({ title }) => String(title).replace(/ /g, '').toLocaleLowerCase() === String(selectKey).replace(/ /g, '').toLocaleLowerCase())
+      filteredData = filteredData.filter(({ id }) => id === selectKey)
     }
     return filteredData
   }
@@ -53,6 +49,7 @@ export default function Counter() {
   useEffect(() => {
     dispatch(fetchData())
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -61,7 +58,7 @@ export default function Counter() {
       <h1>User List</h1>
 
       <div className='flex-container' >
-
+{/* validation pending for user id is pending */}
         <TextField
 
           id="outlined-basic"
@@ -76,11 +73,11 @@ export default function Counter() {
 
         />
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Select User Name</InputLabel>
+          <InputLabel id="demo-simple-select-label">Select User Title</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={selectKey}
+            value={selectKey || ""}
             label="User Name"
             onChange={selectUserTopic}
           >
