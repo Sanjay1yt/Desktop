@@ -11,19 +11,22 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { debounceSearch } from './deBounce';
+import debounce from "lodash.debounce";
 
 export default function Counter() {
   const dispatch = useDispatch()
 
-  const { userList, searchKey, selectKey, checkedValues } = useSelector((state) => state)
+  const { userList, searchKey, selectKey } = useSelector((state) => state)
 
   const searchUser = (e) => {
-    var lowerCase = e.target.value.toLowerCase();
-    dispatch(setSearchKey(lowerCase))
-    dispatch(setSelectKey(''))
+    deBounceDispatch(e.target.value)
   };
-//  const debunce =  debounceSearch(searchUser,300 )
+
+  const deBounceDispatch = debounce((input) => {
+    dispatch(setSearchKey(input))
+    dispatch(setSelectKey(''))
+  }, 500)
+
   const selectUserTopic = (e) => {
     const currentTitle = userList.find(({ id }) => id === e.target.value)
     if (currentTitle) {
